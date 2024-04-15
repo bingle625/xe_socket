@@ -3,7 +3,7 @@ namespace Hsj\XePlugin\ChatPlugin;
 
 use Hsj\XePlugin\ChatPlugin\Events\SendMessage;
 use Illuminate\Http\Request;
-use Route;
+use Illuminate\Support\Facades\Route;
 use Xpressengine\Plugin\AbstractPlugin;
 
 class Plugin extends AbstractPlugin
@@ -22,24 +22,27 @@ class Plugin extends AbstractPlugin
 
     protected function route()
     {
-        // implement code
-        Route::group(
-            ['prefix' => $this->getId()],
-            static function () {
-                Route::get('/', [
-                    'as' => 'chat-plugin::index','uses' => 'Hsj\XePlugin\ChatPlugin\Controller@index'
-                ]);
-                Route::get('/t', function (Request $request) {
-                    $message = [
-                        'text' => $request->input('message'),
-                        'user' => 'hi',
-                    ];
-
-                    broadcast(new SendMessage($message));
-                    dd('Event Run Successfully.');
-                });
-            }
-        );
+        Route::middleware('web')->group(static::path('routes/common.php'));
+//        Route::group(
+//            ['prefix' => $this->getId(), 'middleware' => 'auth'],
+//            static function () {
+//                Route::get('/', [
+//                    'as' => 'chat-plugin::index','uses' => 'Hsj\XePlugin\ChatPlugin\Controller@index'
+//                ]);
+//                Route::post('/message',[
+//                    'as' => 'chat-plugin::send-message',
+//                    'uses' => 'Hsj\XePlugin\ChatPlugin\Controller@sendMessage'
+//                ]);
+//                Route::get('/t', function (Request $request) {
+//                    $message = [
+//                        'text' => $request->input('message'),
+//                        'user' => 'hi',
+//                    ];
+//
+//                    broadcast(new SendMessage($message));
+//                });
+//            }
+//        );
 
     }
 

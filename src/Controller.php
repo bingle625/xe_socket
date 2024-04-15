@@ -1,8 +1,10 @@
 <?php
 namespace Hsj\XePlugin\ChatPlugin;
 
-use XeFrontend;
-use XePresenter;
+use App\Facades\XeFrontend;
+use App\Facades\XePresenter;
+use Hsj\XePlugin\ChatPlugin\Events\SendMessage;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 
 class Controller extends BaseController
@@ -19,5 +21,22 @@ class Controller extends BaseController
 
         // output
         return XePresenter::make('chat-plugin::views.index', ['title' => $title]);
+    }
+
+    public function sendMessage(Request $request)
+    {
+        $message = [
+            'message' => $request->input('message'),
+            'user' => auth()->user()->getKey(),
+            'user_name' => auth()->user()->getDisplayName()
+        ];
+
+        broadcast(new SendMessage($message));
+
+        return XePresenter::makeApi([
+            'success' => 'success',
+            'message' => $request->input('message'),
+            'user_name' => auth()->user()->getDisplayName()
+        ]);
     }
 }
