@@ -10,7 +10,7 @@
     "hot": "mix watch --hot",
     "prod": "npm run production",
     "production": "mix --production",
-    "soketi": "soketi start --port=6001 --host=chat-plugin.test"
+    "soketi": "soketi start --port=6001"
   },
   "author": "",
   "license": "ISC",

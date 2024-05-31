@@ -1,15 +1,26 @@
 <script src="{{ \Hsj\XePlugin\ChatPlugin\Plugin::asset('dist/js/app.js') }}"></script>
 <script>
+    fetch('{{ route('chat-plugin::check') }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'running') {
+                console.log('Soketi server is running on port 6001');
+            } else {
+                console.log('Soketi server is not running on port 6001');
+            }
+        })
+        .catch(error => {
+            console.error('Error checking Soketi server status:', error);
+        });
     window.Echo.channel('chat')
         .listen('.new-message', (e) => {
-            console.log(e.message);
             if (e.message.user != '{{ auth()->id() }}') {
                 const _message_body = e.message;
                 const chatBody = document.querySelector('#chat-body');
                 const messageItem = document.createElement('li');
                 messageItem.classList.add('others-message');
-                const _message = _message_body.message;
                 const _my_name = _message_body.user_name;
+                const _message = _message_body.message;
                 messageItem.innerHTML = `
                 <strong class="chat-name">${_my_name}:</strong>
                 <span class="chat-message">${_message}</span>

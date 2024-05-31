@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'namespace' => 'Hsj\XePlugin\ChatPlugin'
+    'namespace' => 'Hsj\XePlugin\ChatPlugin\Controllers'
 ], static function () {
     Route::group(
             ['prefix' => 'chat-plugin', 'middleware' => 'auth'],
@@ -15,15 +15,11 @@ Route::group([
                     'as' => 'chat-plugin::send-message',
                     'uses' => 'Controller@sendMessage'
                 ]);
-                Route::get('/t', function (Request $request) {
-                    $message = [
-                        'text' => $request->input('message'),
-                        'user' => 'hi',
-                    ];
 
-                    broadcast(new SendMessage($message));
-                });
+                Route::get('/check',[
+                    'as' => 'chat-plugin::check',
+                    'uses' => 'Controller@checkSoketiStatus'
+                ]);
             }
         );
-
 });
